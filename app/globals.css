@@ -31,3 +31,45 @@ body {
     text-wrap: balance;
   }
 }
+
+/* Ensure the main content is centered and takes more width on larger screens */
+.main-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px; /* Add some padding for spacing */
+}
+
+/* Add styles for the two-column layout */
+.two-column-layout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.two-column-layout .column {
+  flex: 1;
+  min-width: 300px;
+}
+
+.divider {
+  margin: 40px 0;
+  border-top: 1px solid #ddd;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+@media (min-width: 768px) {
+  .features-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 1024px) {
+  .features-grid {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import ImageUpload from "./ImageUpload";
 import PlantInfoDisplay from "./PlantInfoDisplay";
+import Features from "./Features";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { PlantInfo } from "../types";
 import { useDispatch, useSelector } from "react-redux";
@@ -84,19 +85,27 @@ export default function HomeContent({
   }
 
   return (
-    <div className="mt-16 bg-white rounded-lg shadow-xl p-8 max-w-md w-full">
+    <div className="main-container mt-16 bg-white rounded-lg shadow-xl p-8">
       <h1 className="text-3xl font-bold mb-6 text-center text-gray-800">
         Plant Identifier
       </h1>
-      <ImageUpload onImageUpload={handleImageUpload} image={image} />
-      <button
-        onClick={identifyPlant}
-        disabled={!image || loading}
-        className="w-full bg-green-500 text-white py-2 px-4 rounded-full shadow-lg hover:bg-green-600 transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed mt-4"
-      >
-        {loading ? "Identifying..." : "Identify Plant"}
-      </button>
-      <PlantInfoDisplay plantInfo={plantInfo} />
+      <div className="two-column-layout">
+        <div className="column">
+          <ImageUpload onImageUpload={handleImageUpload} image={image} />
+          <button
+            onClick={identifyPlant}
+            disabled={!image || loading}
+            className="w-full bg-green-500 text-white py-2 px-4 rounded-full shadow-lg hover:bg-green-600 transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed mt-4"
+          >
+            {loading ? "Identifying..." : "Identify Plant"}
+          </button>
+        </div>
+        <div className="column">
+          <PlantInfoDisplay plantInfo={plantInfo} />
+        </div>
+      </div>
+      <div className="divider"></div>
+      <Features />
     </div>
   );
 }
