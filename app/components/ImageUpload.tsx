@@ -1,21 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 interface ImageUploadProps {
   onImageUpload: (file: File) => void;
+  image: File | null;
 }
 
-const ImageUpload: React.FC<ImageUploadProps> = ({ onImageUpload }) => {
+const ImageUpload: React.FC<ImageUploadProps> = ({ onImageUpload, image }) => {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (image) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setPreviewUrl(reader.result as string);
+      };
+      reader.readAsDataURL(image);
+    }
+  }, [image]);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       onImageUpload(file);
-      const reader = new FileReader();
-      reader.onload = () => {
-        setPreviewUrl(reader.result as string);
-      };
-      reader.readAsDataURL(file);
     }
   };
 

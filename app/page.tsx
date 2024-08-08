@@ -1,15 +1,23 @@
 "use client";
+
 import { useState, useEffect } from "react";
 import { supabase } from "./lib/supabaseClient";
 import Header from "./components/Header";
 import HomeContent from "./components/HomeContent";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "./redux/store";
+import { setSelectedPlant } from "./redux/plantSlice";
 
 export default function Home() {
   const [user, setUser] = useState<any>(null);
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
+  const selectedPlant = useSelector(
+    (state: RootState) => state.plant.selectedPlant
+  );
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const { data: authListener } = supabase.auth.onAuthStateChange(
@@ -64,6 +72,8 @@ export default function Home() {
         user={user}
         setShowLogin={setShowLogin}
         setShowSignup={setShowSignup}
+        selectedPlant={selectedPlant}
+        setSelectedPlant={(plant: string) => dispatch(setSelectedPlant(plant))}
       />
       {showLogin && (
         <div

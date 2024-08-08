@@ -1,8 +1,13 @@
-import { useState } from "react";
+"use client";
+
+import { useState, useEffect } from "react";
 import ImageUpload from "./ImageUpload";
 import PlantInfoDisplay from "./PlantInfoDisplay";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { PlantInfo } from "../types";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../redux/store";
+import { setPlantInfo, setImage } from "../redux/plantSlice";
 
 interface HomeContentProps {
   user: any;
@@ -15,13 +20,14 @@ export default function HomeContent({
   setShowLogin,
   setShowSignup,
 }: HomeContentProps) {
-  const [image, setImage] = useState<File | null>(null);
-  const [plantInfo, setPlantInfo] = useState<PlantInfo | null>(null);
+  const dispatch = useDispatch();
+  const plantInfo = useSelector((state: RootState) => state.plant.plantInfo);
+  const image = useSelector((state: RootState) => state.plant.image);
   const [loading, setLoading] = useState(false);
   const [useCount, setUseCount] = useState(0);
 
   const handleImageUpload = (file: File) => {
-    setImage(file);
+    dispatch(setImage(file));
   };
 
   const identifyPlant = async () => {
@@ -31,7 +37,7 @@ export default function HomeContent({
       return;
     }
     setLoading(true);
-    setPlantInfo(null);
+    dispatch(setPlantInfo(null));
     const genAI = new GoogleGenerativeAI(
       process.env.NEXT_PUBLIC_GOOGLE_GEMINI_API_KEY!
     );
@@ -53,14 +59,14 @@ export default function HomeContent({
       if (jsonMatch && jsonMatch[1]) {
         const jsonString = jsonMatch[1];
         const parsedInfo: PlantInfo = JSON.parse(jsonString);
-        setPlantInfo(parsedInfo);
+        dispatch(setPlantInfo(parsedInfo));
         setUseCount((prevCount) => prevCount + 1);
       } else {
         throw new Error("Unable to extract JSON from the response");
       }
     } catch (error) {
       console.error("Error identifying plant:", error);
-      setPlantInfo(null);
+      dispatch(setPlantInfo(null));
     } finally {
       setLoading(false);
     }
@@ -82,7 +88,7 @@ export default function HomeContent({
       <h1 className="text-3xl font-bold mb-6 text-center text-gray-800">
         Plant Identifier
       </h1>
-      <ImageUpload onImageUpload={handleImageUpload} />
+      <ImageUpload onImageUpload={handleImageUpload} image={image} />
       <button
         onClick={identifyPlant}
         disabled={!image || loading}

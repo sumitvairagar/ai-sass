@@ -1,14 +1,11 @@
-import type { Metadata } from "next";
+"use client";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "./components/Header";
+import { Provider } from "react-redux";
+import { store } from "./redux/store";
 
 const inter = Inter({ subsets: ["latin"] });
-
-export const metadata: Metadata = {
-  title: "Plant Identifier",
-  description: "Identify plants using AI",
-};
 
 function Footer() {
   return (
@@ -36,9 +33,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} flex flex-col min-h-screen`}>
-        <Header />
-        <main className="flex-grow">{children}</main>
-        <Footer />
+        <Provider store={store}>
+          <Header />
+          <main className="flex-grow">{children}</main>
+          <Footer />
+        </Provider>
       </body>
     </html>
   );
