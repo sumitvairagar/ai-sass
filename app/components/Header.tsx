@@ -1,4 +1,4 @@
-import { useState } from "react";
+import Link from "next/link";
 
 interface HeaderProps {
   user: any;
@@ -22,7 +22,19 @@ export default function Header({
               Plant Identifier
             </span>
           </div>
-          <div className="flex items-center space-x-4">
+          <nav className="flex items-center space-x-4">
+            <Link href="/" className="text-gray-700 hover:text-green-600">
+              Home
+            </Link>
+            <Link href="/about" className="text-gray-700 hover:text-green-600">
+              About
+            </Link>
+            <Link
+              href="/contact"
+              className="text-gray-700 hover:text-green-600"
+            >
+              Contact
+            </Link>
             {user ? (
               <button
                 onClick={onLogout}
@@ -46,7 +58,7 @@ export default function Header({
                 </button>
               </>
             )}
-          </div>
+          </nav>
         </div>
       </div>
     </header>
